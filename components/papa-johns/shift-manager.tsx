@@ -26,12 +26,10 @@ export default function ShiftManager({ activeShift }: Props) {
 
     if (!activeShift) {
         return (
-            <div className="flex flex-col justify-between items-center h-[calc(100%-220px)]">
-                <Typography variant="h5" className="pt-4">Delivery Entry</Typography>
+            <div className="flex flex-col mt-25 items-center h-full">
                 <Button variant="contained" onClick={handleStartShift}>
                     Start Shift
                 </Button>
-                <div className="h-12" />
             </div>
         );
     }

@@ -269,7 +269,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
 
     return (
         <div>
-            <ButtonGroup variant="outlined" className="ml-8">
+            <ButtonGroup variant="outlined" className="m-0 md:ml-8">
                 <Button
                     variant={activeFilter === "today" ? "contained" : "outlined"}
                     onClick={() => setActiveFilter("today")}
@@ -358,7 +358,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
 
                     <div>
                         <div className="text-sm text-gray-500">Total Hours</div>
-                        <div>{totals.totalHours}</div>
+                        <div>{totals.totalHours.toFixed(2)}</div>
                     </div>
 
                     <div>

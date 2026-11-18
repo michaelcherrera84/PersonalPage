@@ -12,7 +12,7 @@ async function ShiftData() {
 export default function ShiftDataPage() {
     return (
         <main className="p-4">
-            <header className="flex flex-col gap-3 items-center">
+            <header className="flex flex-col gap-3 items-center mb-8">
                 <Typography variant="h3">Papa Johns</Typography>
                 <Typography variant="h5">Shift Data</Typography>
             </header>

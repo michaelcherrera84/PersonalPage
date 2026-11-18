@@ -22,8 +22,8 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="flex justify-center items-center w-screen h-[calc(100vh-124px)]">
-            <form onSubmit={handleLogin} className="w-75">
+        <main className="flex justify-center w-screen h-[calc(100vh-72px)]">
+            <form onSubmit={handleLogin} className="w-75 mt-20">
                 <fieldset className="flex flex-col gap-3">
                     <legend>
                         <Typography variant="h5" className="py-4 text-center">

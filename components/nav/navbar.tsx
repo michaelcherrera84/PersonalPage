@@ -57,7 +57,7 @@ export default function Navbar() {
     );
 
     return (
-        <nav className="p-2">
+        <nav className="p-4">
             <IconButton onClick={toggleDrawer(true)}>
                 <MenuIcon />
             </IconButton>
