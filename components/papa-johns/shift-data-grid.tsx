@@ -4,7 +4,7 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import type { Shift } from "@/db/schema";
 import { updateShiftAction } from "@/lib/actions/papa-johns/shift-actions";
-import { Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
 
 type EditableShift = Omit<
@@ -313,32 +313,32 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     </Button>
                 </ButtonGroup>
             </div>
-            <div className="sm:hidden m-2 flex justify-between gap-2 flex-wrap">
+            <div className="sm:hidden m-4 flex justify-between gap-2 flex-wrap">
                 <Typography
                     onClick={() => setActiveFilter("today")}
                     className="cursor-pointer hover:underline text-nowrap"
-                    sx={{ color: activeFilter == "today" ? "white" : "primary.main" }}
+                    sx={{ color: activeFilter == "today" ? "primary" : "primary.main" }}
                 >
                     Today
                 </Typography>
                 <Typography
                     onClick={() => setActiveFilter("week")}
                     className="cursor-pointer hover:underline text-nowrap"
-                    sx={{ color: activeFilter == "week" ? "white" : "primary.main" }}
+                    sx={{ color: activeFilter == "week" ? "primary" : "primary.main" }}
                 >
                     This Week
                 </Typography>
                 <Typography
                     onClick={() => setActiveFilter("payPeriod")}
                     className="cursor-pointer hover:underline text-nowrap"
-                    sx={{ color: activeFilter == "payPeriod" ? "white" : "primary.main" }}
+                    sx={{ color: activeFilter == "payPeriod" ? "primary" : "primary.main" }}
                 >
                     This Pay Period
                 </Typography>
                 <Typography
                     onClick={() => setActiveFilter("month")}
                     className="cursor-pointer hover:underline text-nowrap"
-                    sx={{ color: activeFilter == "month" ? "white" : "primary.main" }}
+                    sx={{ color: activeFilter == "month" ? "primary" : "primary.main" }}
                 >
                     This Month
                 </Typography>
@@ -357,7 +357,8 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     }}
                 />
             </Paper>
-            <Paper className="mx-2 mt-4 md:m-8 p-4 border border-white/20">
+
+            <Paper className="m-2 md:m-8 p-4 border border-gray-300 shadow shadow-gray-300 dark:border-white/30 dark:shadow-none">
                 <div className="font-bold mb-3">Totals</div>
 
                 <div className="flex flex-wrap gap-6">
@@ -435,6 +436,13 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                         <div className="text-sm text-gray-500">Average Rating</div>
                         <div>{totals.averageRating}</div>
                     </div>
+
+                    {activeFilter === "today" && (
+                        <div>
+                            <div className="text-sm text-gray-500">Instant Pay</div>
+                            <div>{currencyFormatter.format(totals.ccTips + totals.mileage)}</div>
+                        </div>
+                    )}
                 </div>
             </Paper>
         </div>

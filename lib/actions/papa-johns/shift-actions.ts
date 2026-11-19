@@ -7,6 +7,18 @@ import { ActionResponse } from "@/lib/types/Response";
 import { getDeliveriesByShiftId } from "@/lib/services/papa-johns/delivery-service";
 import { verifySession } from "@/lib/auth/session";
 
+function getOptionalNumber(formData: FormData, key: string): number | null {
+    const value = formData.get(key);
+
+    if (typeof value !== "string" || value.trim() === "") {
+        return null;
+    }
+
+    const number = Number(value);
+
+    return Number.isFinite(number) ? number : null;
+}
+
 export async function startShiftAction(): Promise<ActionResponse<Shift>> {
     const user = await verifySession();
 
@@ -71,7 +83,11 @@ export async function updateShiftAction(data: Shift): Promise<ActionResponse<Shi
     }
 }
 
-export async function endShiftAction(data: Shift): Promise<ActionResponse<Shift>> {
+export async function endShiftAction(
+    data: Shift,
+    formData: FormData
+): Promise<ActionResponse<Shift>> {
+
     const user = await verifySession();
 
     if (!user) {
@@ -81,26 +97,61 @@ export async function endShiftAction(data: Shift): Promise<ActionResponse<Shift>
         };
     }
 
-    data.end = new Date();
-
     try {
         const deliveries = await getDeliveriesByShiftId(data.id);
 
-        let cashTips = 0;
-        let ccTips = 0;
-        deliveries.map((delivery) => {
-            cashTips += delivery.cashTip || 0;
-            ccTips += delivery.ccTip || 0;
-        });
+        // Additional shift information
+        const storeHrs = getOptionalNumber(formData, "storeHrs");
+        const roadHrs = getOptionalNumber(formData, "roadHrs");
+        const miles = getOptionalNumber(formData, "miles");
 
-        const ratedDeliveries = deliveries.filter((delivery) => delivery.rating !== null);
-        const averageRating = ratedDeliveries.length
-            ? ratedDeliveries.reduce((total, delivery) => total + delivery.rating!, 0) / ratedDeliveries.length
+        // Tips
+        const cashTipsEntered = deliveries
+            .map(delivery => delivery.cashTip)
+            .filter((tip): tip is number => tip !== null && tip !== undefined);
+
+        const ccTipsEntered = deliveries
+            .map(delivery => delivery.ccTip)
+            .filter((tip): tip is number => tip !== null && tip !== undefined);
+
+        const cashTips = cashTipsEntered.length
+            ? cashTipsEntered.reduce((sum, tip) => sum + tip, 0)
             : null;
 
-        data.cashTips = cashTips === 0 ? null : cashTips;
-        data.ccTips = ccTips === 0 ? null : ccTips;
+        const ccTips = ccTipsEntered.length
+            ? ccTipsEntered.reduce((sum, tip) => sum + tip, 0)
+            : null;
+
+        // Average rating
+        const ratedDeliveries = deliveries.filter(
+            (delivery) => delivery.rating !== null && delivery.rating !== undefined
+        );
+
+        const averageRating = ratedDeliveries.length
+            ? ratedDeliveries.reduce(
+                (total, delivery) => total + delivery.rating!,
+                0
+            ) / ratedDeliveries.length
+            : null;
+
+        // Calculations
+        const driverInStorePay = storeHrs === null ? null : storeHrs * 8;
+        const onRoadPay = roadHrs === null ? null : roadHrs * 5.50;
+        const mileage = miles === null ? null : miles * 0.45;
+        const mileageCost = miles === null ? null : miles * 0.76;
+
+        // Update shift
+        data.end = new Date();
+        data.storeHrs = storeHrs;
+        data.roadHrs = roadHrs;
+        data.miles = miles;
+        data.cashTips = cashTips;
+        data.ccTips = ccTips;
         data.averageRating = averageRating;
+        data.driverInStorePay = driverInStorePay;
+        data.onRoadPay = onRoadPay;
+        data.mileage = mileage;
+        data.mileageCost = mileageCost;
 
         const shift = await updateShiftService(data);
 
@@ -111,10 +162,11 @@ export async function endShiftAction(data: Shift): Promise<ActionResponse<Shift>
             data: shift,
             message: "Shift updated successfully.",
         };
+
     } catch (error) {
         return {
             success: false,
-            message: `Failed to end shift ${error instanceof Error && ":" + error.message}`,
+            message: `Failed to end shift${error instanceof Error ? `: ${error.message}` : ""}`,
         };
     }
 }
