@@ -14,6 +14,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
     title: "Personal Page",
     description: "Personal job companion.",
+    appleWebApp: {
+        title: "Personal",
+    },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -22,9 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <body className="min-h-full flex flex-col">
                 <InitColorSchemeScript />
                 <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-                    <Providers>
-                        {children}
-                    </Providers>
+                    <Providers>{children}</Providers>
                 </AppRouterCacheProvider>
             </body>
         </html>
