@@ -13,6 +13,7 @@ export const shiftSchema = z.object({
     cashTips: z.number().optional().nullable(),
     ccTips: z.number().nonnegative().optional().nullable(),
     mileageCost: z.number().nonnegative().optional().nullable(),
+    averageRating: z.number().min(0.5).max(5).optional().nullable(),
 });
 
 export const shiftCreateSchema = shiftSchema.pick({ start: true });

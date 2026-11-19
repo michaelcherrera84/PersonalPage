@@ -1,6 +1,6 @@
 import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
 import ShiftManager from "@/components/papa-johns/shift-manager";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Suspense } from "react";
 
 async function ActiveShift() {
@@ -11,14 +11,15 @@ async function ActiveShift() {
 
 export default async function PapaJohnsPage() {
     return (
-        <main className="h-[calc(100vh-72px)]">
+        <Box>
             <header className="flex flex-col gap-3 items-center">
-                <Typography variant="h3">Papa Johns</Typography>
-                <Typography variant="h5" className="pt-4">Delivery Entry</Typography>
+                <Typography variant="h2" className="font-light text-2xl">
+                    Delivery Entry
+                </Typography>
             </header>
             <Suspense fallback={<p>Loading shift...</p>}>
                 <ActiveShift />
             </Suspense>
-        </main>
+        </Box>
     );
 }

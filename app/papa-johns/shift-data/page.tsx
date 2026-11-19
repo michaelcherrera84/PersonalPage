@@ -1,6 +1,6 @@
 import ShiftDataGrid from "@/components/papa-johns/shift-data-grid";
 import { getAllShiftsService } from "@/lib/services/papa-johns/shift-service";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Suspense } from "react";
 
 async function ShiftData() {
@@ -11,15 +11,16 @@ async function ShiftData() {
 
 export default function ShiftDataPage() {
     return (
-        <main className="p-4">
-            <header className="flex flex-col gap-3 items-center mb-8">
-                <Typography variant="h3">Papa Johns</Typography>
-                <Typography variant="h5">Shift Data</Typography>
+        <Box>
+            <header className="flex flex-col gap-3 items-center">
+                <Typography variant="h2" className="font-light text-2xl">
+                    Shift Data
+                </Typography>
             </header>
 
             <Suspense fallback={<p>Loading data...</p>}>
                 <ShiftData />
             </Suspense>
-        </main>
+        </Box>
     );
 }

@@ -80,7 +80,7 @@ export async function endShiftAction(data: Shift): Promise<ActionResponse<Shift>
             message: "You must be logged in to perform this action.",
         };
     }
-    
+
     data.end = new Date();
 
     try {
@@ -93,8 +93,14 @@ export async function endShiftAction(data: Shift): Promise<ActionResponse<Shift>
             ccTips += delivery.ccTip || 0;
         });
 
+        const ratedDeliveries = deliveries.filter((delivery) => delivery.rating !== null);
+        const averageRating = ratedDeliveries.length
+            ? ratedDeliveries.reduce((total, delivery) => total + delivery.rating!, 0) / ratedDeliveries.length
+            : null;
+
         data.cashTips = cashTips === 0 ? null : cashTips;
-        data.ccTips = ccTips === 0 ? null : ccTips
+        data.ccTips = ccTips === 0 ? null : ccTips;
+        data.averageRating = averageRating;
 
         const shift = await updateShiftService(data);
 

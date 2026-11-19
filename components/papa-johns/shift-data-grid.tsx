@@ -4,7 +4,7 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import type { Shift } from "@/db/schema";
 import { updateShiftAction } from "@/lib/actions/papa-johns/shift-actions";
-import { Button, ButtonGroup } from "@mui/material";
+import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
 
 type EditableShift = Omit<
@@ -126,6 +126,14 @@ const columns: GridColDef[] = [
         align: "right",
         valueFormatter: (value) => (value == null ? "" : currencyFormatter.format(value)),
     },
+    {
+        field: "averageRating",
+        headerName: "Average Rating",
+        headerAlign: "center",
+        type: "number",
+        width: 130,
+        align: "right",
+    },
 ];
 
 function getDateRange(filter: DateFilter) {
@@ -178,6 +186,10 @@ function getDateRange(filter: DateFilter) {
 }
 
 function calculateTotals(rows: Shift[]) {
+    const ratings = rows
+        .map((row) => row.averageRating)
+        .filter((rating): rating is number => rating !== null && rating !== undefined);
+
     const totals = {
         storeHrs: rows.reduce((sum, row) => sum + (row.storeHrs ?? 0), 0),
         roadHrs: rows.reduce((sum, row) => sum + (row.roadHrs ?? 0), 0),
@@ -188,6 +200,7 @@ function calculateTotals(rows: Shift[]) {
         cashTips: rows.reduce((sum, row) => sum + (row.cashTips ?? 0), 0),
         ccTips: rows.reduce((sum, row) => sum + (row.ccTips ?? 0), 0),
         mileageCost: rows.reduce((sum, row) => sum + (row.mileageCost ?? 0), 0),
+        averageRating: ratings.length ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length : null,
     };
 
     const totalHours = totals.storeHrs + totals.roadHrs;
@@ -217,7 +230,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
 });
 
 export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
-    const [activeFilter, setActiveFilter] = useState<DateFilter>("month");
+    const [activeFilter, setActiveFilter] = useState<DateFilter>("week");
 
     const [allRows, setAllRows] = useState(rows);
 
@@ -268,37 +281,69 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
     }
 
     return (
-        <div>
-            <ButtonGroup variant="outlined" className="m-0 md:ml-8">
-                <Button
-                    variant={activeFilter === "today" ? "contained" : "outlined"}
+        <div className="mt-8">
+            <div className="hidden sm:block">
+                <ButtonGroup variant="outlined" className="m-0 md:ml-8">
+                    <Button
+                        variant={activeFilter === "today" ? "contained" : "outlined"}
+                        onClick={() => setActiveFilter("today")}
+                    >
+                        Today
+                    </Button>
+
+                    <Button
+                        variant={activeFilter === "week" ? "contained" : "outlined"}
+                        onClick={() => setActiveFilter("week")}
+                    >
+                        This Week
+                    </Button>
+
+                    <Button
+                        variant={activeFilter === "payPeriod" ? "contained" : "outlined"}
+                        onClick={() => setActiveFilter("payPeriod")}
+                    >
+                        This Pay Period
+                    </Button>
+
+                    <Button
+                        variant={activeFilter === "month" ? "contained" : "outlined"}
+                        onClick={() => setActiveFilter("month")}
+                    >
+                        This Month
+                    </Button>
+                </ButtonGroup>
+            </div>
+            <div className="sm:hidden m-2 flex justify-between gap-2 flex-wrap">
+                <Typography
                     onClick={() => setActiveFilter("today")}
+                    className="cursor-pointer hover:underline text-nowrap"
+                    sx={{ color: activeFilter == "today" ? "white" : "primary.main" }}
                 >
                     Today
-                </Button>
-
-                <Button
-                    variant={activeFilter === "week" ? "contained" : "outlined"}
+                </Typography>
+                <Typography
                     onClick={() => setActiveFilter("week")}
+                    className="cursor-pointer hover:underline text-nowrap"
+                    sx={{ color: activeFilter == "week" ? "white" : "primary.main" }}
                 >
                     This Week
-                </Button>
-
-                <Button
-                    variant={activeFilter === "payPeriod" ? "contained" : "outlined"}
+                </Typography>
+                <Typography
                     onClick={() => setActiveFilter("payPeriod")}
+                    className="cursor-pointer hover:underline text-nowrap"
+                    sx={{ color: activeFilter == "payPeriod" ? "white" : "primary.main" }}
                 >
                     This Pay Period
-                </Button>
-
-                <Button
-                    variant={activeFilter === "month" ? "contained" : "outlined"}
+                </Typography>
+                <Typography
                     onClick={() => setActiveFilter("month")}
+                    className="cursor-pointer hover:underline text-nowrap"
+                    sx={{ color: activeFilter == "month" ? "white" : "primary.main" }}
                 >
                     This Month
-                </Button>
-            </ButtonGroup>
-            <Paper className="m-8">
+                </Typography>
+            </div>
+            <Paper className="m-2 md:m-8">
                 <DataGrid
                     rows={filteredRows}
                     columns={columns}
@@ -312,7 +357,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     }}
                 />
             </Paper>
-            <Paper className="m-8 p-4 border border-white/20">
+            <Paper className="mx-2 mt-4 md:m-8 p-4 border border-white/20">
                 <div className="font-bold mb-3">Totals</div>
 
                 <div className="flex flex-wrap gap-6">
@@ -384,6 +429,11 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     <div>
                         <div className="text-sm text-gray-500">Earnings/Hour</div>
                         <div>{currencyFormatter.format(totals.earningsPerHour)}</div>
+                    </div>
+
+                    <div>
+                        <div className="text-sm text-gray-500">Average Rating</div>
+                        <div>{totals.averageRating}</div>
                     </div>
                 </div>
             </Paper>

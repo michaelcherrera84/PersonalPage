@@ -8,13 +8,18 @@ import {
     Drawer,
     IconButton,
     Link,
+    Paper,
     Typography,
 } from "@mui/material";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { logout } from "@/lib/actions/auth-actions";
 
-export default function Navbar() {
+type Props = {
+    title: string;
+};
+
+export default function Navbar({ title }: Props) {
     const [open, setOpen] = useState(false);
 
     const toggleDrawer = (newOpen: boolean) => () => {
@@ -23,7 +28,9 @@ export default function Navbar() {
 
     const DrawerList = (
         <Box role="presentation" className="flex flex-col w-62.5 h-full">
-            <Typography variant="h5" className="p-4">Personal Page</Typography>
+            <Typography variant="h5" className="p-4">
+                Personal Page
+            </Typography>
             <Accordion disableGutters>
                 <AccordionSummary LinkComponent={Link} href="/">
                     <Typography className="hover:underline">Dashboard</Typography>
@@ -57,13 +64,27 @@ export default function Navbar() {
     );
 
     return (
-        <nav className="p-4">
-            <IconButton onClick={toggleDrawer(true)}>
-                <MenuIcon />
-            </IconButton>
+        <nav className="sticky top-0 bg-background">
+            <div className="p-4 flex justify-between align-middle sm:hidden">
+                <IconButton onClick={toggleDrawer(true)}>
+                    <MenuIcon />
+                </IconButton>
+                <Typography variant="h1" className="text-4xl font-medium">{title}</Typography>
+                <IconButton className="opacity-0">
+                    <MenuIcon />
+                </IconButton>
+            </div>
             <Drawer open={open} onClose={toggleDrawer(false)}>
                 {DrawerList}
             </Drawer>
+           
+            <Paper className="hidden sm:flex justify-between items-center py-4 px-8 mb-8">
+                <Typography variant="h1" className="text-3xl font-medium">{title}</Typography>
+                <div className="flex gap-8">
+                    <Link href="/papa-johns">Delivery Entry</Link>
+                    <Link href="/papa-johns/shift-data">Shift Data</Link>
+                </div>
+            </Paper>
         </nav>
     );
 }

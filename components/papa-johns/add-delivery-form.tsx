@@ -17,8 +17,12 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
     const [cashPayment, setCashPayment] = useState("");
     const formRef = useRef<HTMLFormElement>(null);
 
+    const isFormEmpty = !cashTip.trim() && !ccTip.trim() && rating === null && !location.trim() && !cashPayment.trim();
+
     const handleAddDelivery = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (isFormEmpty) return;
 
         const form = event.currentTarget;
         const formData = new FormData(form);
@@ -50,6 +54,7 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
                         name="cashTip"
                         label="Cash Tip"
                         type="number"
+                        inputMode="decimal"
                         value={cashTip}
                         onChange={(e) => setCashTip(e.target.value)}
                     />
@@ -59,13 +64,14 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
                         name="ccTip"
                         label="CC Tip"
                         type="number"
+                        inputMode="decimal"
                         value={ccTip}
                         onChange={(e) => setCcTip(e.target.value)}
                     />
                 </div>
-                <div className="flex border border-white/30 px-3 py-4 rounded justify-between">
+                <div className="flex border items-center border-white/30 px-3 py-4 rounded justify-between">
                     <Typography>Rate this delivery</Typography>
-                    <Rating precision={0.5} value={rating} onChange={(_, value) => setRating(value)} />
+                    <Rating precision={0.5} value={rating} size="large" onChange={(_, value) => setRating(value)} />
                 </div>
                 {location ? (
                     <TextField
@@ -82,10 +88,11 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
                     name="cashPayment"
                     label="Cash Payment"
                     type="number"
+                    inputMode="decimal"
                     value={cashPayment}
                     onChange={(e) => setCashPayment(e.target.value)}
                 />
-                <Button type="submit" variant="contained" className="mt-6">
+                <Button type="submit" variant="contained" className="mt-6 mb-12" disabled={isFormEmpty}>
                     Submit
                 </Button>
             </fieldset>
