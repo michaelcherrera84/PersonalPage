@@ -10,7 +10,7 @@ const optionalNonnegativeNumber = optionalNumber.refine(
 );
 
 const optionalRating = optionalNumber.refine(
-    (value) => value === null || (value >= 1 && value <= 5)
+    (value) => value === null || (value >= 0.5 && value <= 5)
 );
 
 export const deliverySchema = z.object({

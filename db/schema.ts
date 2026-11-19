@@ -51,6 +51,12 @@ export const shift = pgTable("papa-johns-shifts", {
         scale: 2,
         mode: "number",
     }),
+
+    averageRating: numeric("average_rating", {
+        precision: 3,
+        scale: 2,
+        mode: "number",
+    }),
 });
 
 export type Shift = InferSelectModel<typeof shift>;

@@ -15,12 +15,12 @@ export default function ShiftTabs() {
     const activeTab = tabs.some((tab) => tab.href === pathname) ? pathname : "/papa-johns";
 
     return (
-        <div className="fixed bottom-20 left-0 w-full flex justify-center">
+        <div className="fixed bottom-5 left-0 w-full flex justify-center">
             <BottomNavigation
                 showLabels
                 value={activeTab}
                 onChange={(_, newValue: string) => router.push(newValue)}
-                className="p-3"
+                className="p-3 rounded-2xl border-white/30 border shadow shadow-black/20"
             >
                 {tabs.map((tab) => (
                     <BottomNavigationAction key={tab.href} label={tab.label} value={tab.href} className="text-nowrap" />

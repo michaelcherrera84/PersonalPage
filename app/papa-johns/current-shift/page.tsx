@@ -1,7 +1,7 @@
 import ShiftTabs from "@/components/papa-johns/shift-tabs";
 import { getDeliveriesByShiftId } from "@/lib/services/papa-johns/delivery-service";
 import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
-import { Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { Suspense } from "react";
 
 async function CurrentShiftContent() {
@@ -30,12 +30,12 @@ async function CurrentShiftContent() {
     const cashPayments = deliveries.reduce((total, delivery) => total + (delivery.cashPayment ?? 0), 0);
 
     return (
-        <div className="pt-8">
+        <div className="pt-8 px-4">
             <TableContainer component={Paper}>
                 <Table>
                     <TableBody>
                         <TableRow>
-                            <TableCell>Shift Start</TableCell>
+                            <TableCell>Start (Hours)</TableCell>
                             <TableCell align="right">
                                 {activeShift.start.toLocaleTimeString([], { timeStyle: "short" })}
                             </TableCell>
@@ -54,7 +54,7 @@ async function CurrentShiftContent() {
                         </TableRow>
                         <TableRow>
                             <TableCell>Average Rating</TableCell>
-                            <TableCell align="right">{averageRating || "No rated deliveries"}</TableCell>
+                            <TableCell align="right">{averageRating?.toFixed(2) || "No rated deliveries"}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Cash Payments</TableCell>
@@ -72,17 +72,19 @@ async function CurrentShiftContent() {
 }
 
 export default function CurrentShiftPage() {
+    
     return (
-        <main className="p-4">
+        <Box>
             <header className="flex flex-col gap-3 items-center">
-                <Typography variant="h3">Papa Johns</Typography>
-                <Typography variant="h5">Current Shift</Typography>
+                <Typography variant="h2" className="font-light text-2xl">
+                    Current Shift
+                </Typography>
             </header>
 
             <Suspense fallback={<p>Loading shift information...</p>}>
                 <CurrentShiftContent />
                 <ShiftTabs />
             </Suspense>
-        </main>
+        </Box>
     );
 }

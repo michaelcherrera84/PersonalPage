@@ -14,7 +14,7 @@ export default function LoginPage() {
         const response = await login(formData);
 
         if (response.success) {
-            router.replace("/papa-johns");
+            router.replace("/");
             router.refresh();
         } else {
             alert(response.message);
@@ -22,18 +22,43 @@ export default function LoginPage() {
     };
 
     return (
-        <main className="flex justify-center w-screen h-[calc(100vh-72px)]">
-            <form onSubmit={handleLogin} className="w-75 mt-20">
+        <main className="flex flex-col items-center gap-10 w-screen h-screen mt-25">
+            <Typography variant="h1" className="font-medium text-4xl">Personal Page</Typography>
+            <form onSubmit={handleLogin} className="w-75">
                 <fieldset className="flex flex-col gap-3">
                     <legend>
-                        <Typography variant="h5" className="py-4 text-center">
+                        <Typography variant="h2" className="pb-4 text-center font-normal text-2xl">
                             Sign In
                         </Typography>
                     </legend>
-                    <TextField name="email" type="email" label="Email" className="w-full" required />
-                    <TextField name="password" type="password" label="Password" className="w-full" required />
+                    <TextField
+                        name="email"
+                        type="email"
+                        label="Email"
+                        className="w-full"
+                        required
+                        slotProps={{
+                            inputLabel: {
+                                required: false,
+                            },
+                        }}
+                    />
+                    <TextField
+                        name="password"
+                        type="password"
+                        label="Password"
+                        className="w-full"
+                        required
+                        slotProps={{
+                            inputLabel: {
+                                required: false,
+                            },
+                        }}
+                    />
 
-                    <Button type="submit" variant="contained">Sign In</Button>
+                    <Button type="submit" variant="contained">
+                        Sign In
+                    </Button>
                 </fieldset>
             </form>
         </main>
