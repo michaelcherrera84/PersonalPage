@@ -14,8 +14,12 @@ const roboto = Roboto({
 export const metadata: Metadata = {
     title: "Personal Page",
     description: "Personal job companion.",
-    appleWebApp: {
-        title: "Personal",
+    appleWebApp: { capable: true, title: "Personal", statusBarStyle: "black-translucent" },
+    icons: {
+        icon: [
+            { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+            { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        ],
     },
 };
 
