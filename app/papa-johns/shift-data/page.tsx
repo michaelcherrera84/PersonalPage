@@ -11,7 +11,7 @@ async function ShiftData() {
 
 export default function ShiftDataPage() {
     return (
-        <Box>
+        <Box className="pb-8">
             <header className="flex flex-col gap-3 items-center">
                 <Typography variant="h2" className="font-light text-2xl">
                     Shift Data

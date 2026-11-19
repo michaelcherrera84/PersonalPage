@@ -64,7 +64,7 @@ export default function Navbar({ title }: Props) {
     );
 
     return (
-        <nav className="sticky top-0 bg-background">
+        <nav className="sticky top-0 bg-background z-50">
             <div className="p-4 flex justify-between align-middle sm:hidden">
                 <IconButton onClick={toggleDrawer(true)}>
                     <MenuIcon />
