@@ -1,6 +1,6 @@
 "use server";
 
-import { createDeliveryService } from "@/lib/services/papa-johns/delivery-service";
+import { createDeliveryService, updateDeliveryService } from "@/lib/services/papa-johns/delivery-service";
 import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
 import { Delivery } from "@/db/schema";
 import { ActionResponse } from "@/lib/types/Response";
@@ -157,7 +157,7 @@ export async function addDeliveryAction(formData: FormData): Promise<ActionRespo
             message: "You must be logged in to perform this action.",
         };
     }
-    
+
     const data = Object.fromEntries(formData.entries());
 
     try {
@@ -178,6 +178,32 @@ export async function addDeliveryAction(formData: FormData): Promise<ActionRespo
         return {
             success: false,
             message: `Failed to insert delivery ${error instanceof Error && ":" + error.message}`,
+        };
+    }
+}
+
+export async function updateDeliveryAction(data: Delivery): Promise<ActionResponse<Delivery>> {
+    const user = await verifySession();
+
+    if (!user) {
+        return {
+            success: false,
+            message: "You must be logged in to perform this action.",
+        };
+    }
+
+    try {
+        const updated = await updateDeliveryService(data);
+
+        return {
+            success: true,
+            data: updated,
+            message: "Delivery updated successfully.",
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: `Failed to update delivery ${error instanceof Error && ":" + error.message}`,
         };
     }
 }

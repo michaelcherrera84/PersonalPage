@@ -25,6 +25,8 @@ export const deliverySchema = z.object({
 });
 
 export const deliveryCreateSchema = deliverySchema.omit({ id: true });
+export const deliveryUpdateSchema = deliverySchema.partial().extend({ id: z.number().int().positive() });
 
 export type Delivery = z.infer<typeof deliverySchema>;
 export type CreateDelivery = z.infer<typeof deliveryCreateSchema>;
+export type UpdateShift = z.infer<typeof deliveryUpdateSchema>;

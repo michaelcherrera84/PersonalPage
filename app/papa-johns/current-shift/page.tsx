@@ -2,7 +2,7 @@ import EndShiftButton from "@/components/papa-johns/end-shift-button";
 import ShiftTabs from "@/components/papa-johns/shift-tabs";
 import { getDeliveriesByShiftId } from "@/lib/services/papa-johns/delivery-service";
 import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { Suspense } from "react";
 
 async function CurrentShiftContent() {
@@ -11,6 +11,9 @@ async function CurrentShiftContent() {
     if (!activeShift) {
         return <p>There is no active shift.</p>;
     }
+
+    const now = new Date();
+    const elapsedHours = (now.getTime() - activeShift.start.getTime()) / (1000 * 60 * 60);
 
     const deliveries = await getDeliveriesByShiftId(activeShift.id);
 
@@ -38,7 +41,11 @@ async function CurrentShiftContent() {
                         <TableRow>
                             <TableCell>Start (Hours)</TableCell>
                             <TableCell align="right">
-                                {activeShift.start.toLocaleTimeString([], { timeStyle: "short" })}
+                                {activeShift.start.toLocaleTimeString("en-US", {
+                                    timeStyle: "short",
+                                    timeZone: "America/Chicago",
+                                })}{" "}
+                                ({elapsedHours.toFixed(1)} hrs)
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -52,6 +59,10 @@ async function CurrentShiftContent() {
                         <TableRow>
                             <TableCell>Cash Tips</TableCell>
                             <TableCell align="right">{currency.format(cashTips)}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell>Total Tips</TableCell>
+                            <TableCell align="right">{currency.format(cashTips + ccTips)}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Average Rating</TableCell>
@@ -68,8 +79,9 @@ async function CurrentShiftContent() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <div className="mt-4">
+            <div className="mt-4 flex justify-between">
                 <EndShiftButton activeShift={activeShift} />
+                <Button variant="outlined" href="/papa-johns/shift-data/edit-deliveries">Edit Deliveries</Button>
             </div>
         </div>
     );

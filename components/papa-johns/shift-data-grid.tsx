@@ -4,7 +4,7 @@ import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import type { Shift } from "@/db/schema";
 import { updateShiftAction } from "@/lib/actions/papa-johns/shift-actions";
-import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
 
 type EditableShift = Omit<
@@ -31,6 +31,18 @@ type EditableShift = Omit<
 };
 
 type DateFilter = "today" | "week" | "payPeriod" | "month";
+
+const currencyFormatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+});
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "2-digit",
+    timeZone: "America/Chicago",
+});
 
 const columns: GridColDef[] = [
     {
@@ -217,17 +229,6 @@ function calculateTotals(rows: Shift[]) {
         earningsPerHour: totalHours > 0 ? netEarnings / totalHours : 0,
     };
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-});
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-    month: "2-digit",
-    day: "2-digit",
-    year: "2-digit",
-});
 
 export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
     const [activeFilter, setActiveFilter] = useState<DateFilter>("week");

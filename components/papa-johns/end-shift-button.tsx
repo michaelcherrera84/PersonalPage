@@ -30,19 +30,51 @@ export default function EndShiftButton({ activeShift }: { activeShift: Shift }) 
             <Button variant="outlined" onClick={() => setOpenDialog(true)}>
                 End Shift
             </Button>
-            
+
             <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                 <DialogTitle>Shift Data</DialogTitle>
                 <DialogContent>
                     <form onSubmit={handleEndShift} id="shift-data-form" className="flex flex-col gap-2">
-                        <TextField name="storeHrs" label="Store Hours" type="number" />
-                        <TextField name="roadHrs" label="Road Hours" type="number" />
-                        <TextField name="miles" label="Miles" type="number" />
+                        <TextField
+                            name="storeHrs"
+                            label="Store Hours"
+                            type="number"
+                            slotProps={{
+                                htmlInput: {
+                                    step: "0.01",
+                                    min: 0,
+                                },
+                            }}
+                        />
+                        <TextField
+                            name="roadHrs"
+                            label="Road Hours"
+                            type="number"
+                            slotProps={{
+                                htmlInput: {
+                                    step: "0.01",
+                                    min: 0,
+                                },
+                            }}
+                        />
+                        <TextField
+                            name="miles"
+                            label="Miles"
+                            type="number"
+                            slotProps={{
+                                htmlInput: {
+                                    step: "0.01",
+                                    min: 0,
+                                },
+                            }}
+                        />
                     </form>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-                    <Button type="submit" form="shift-data-form">Submit</Button>
+                    <Button type="submit" form="shift-data-form">
+                        Submit
+                    </Button>
                 </DialogActions>
             </Dialog>
         </>
