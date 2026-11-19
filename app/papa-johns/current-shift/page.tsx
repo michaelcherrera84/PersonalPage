@@ -1,3 +1,4 @@
+import EndShiftButton from "@/components/papa-johns/end-shift-button";
 import ShiftTabs from "@/components/papa-johns/shift-tabs";
 import { getDeliveriesByShiftId } from "@/lib/services/papa-johns/delivery-service";
 import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
@@ -67,12 +68,14 @@ async function CurrentShiftContent() {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <div className="mt-4">
+                <EndShiftButton activeShift={activeShift} />
+            </div>
         </div>
     );
 }
 
 export default function CurrentShiftPage() {
-    
     return (
         <Box>
             <header className="flex flex-col gap-3 items-center">

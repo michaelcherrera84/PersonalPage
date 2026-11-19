@@ -1,3 +1,3 @@
-import { createEmotionCache } from "@mui/material-nextjs/v15-pagesRouter";
+import { createEmotionCache } from "@mui/material-nextjs/v16-pagesRouter";
 
 export const emotionCache = createEmotionCache({ key: "mui", enableCssLayer: true });

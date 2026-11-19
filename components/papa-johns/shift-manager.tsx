@@ -34,22 +34,8 @@ export default function ShiftManager({ activeShift }: Props) {
         );
     }
 
-    const handleEndShift = async () => {
-        const response = await endShiftAction(activeShift);
-
-        if (!response.success) {
-            alert(response.message);
-        }
-    };
-
     return (
         <div className="py-10 px-4">
-            <div className="flex justify-end">
-                <Button variant="outlined" onClick={handleEndShift}>
-                    End Shift
-                </Button>
-            </div>
-
             <AddDeliveryForm location={location} setLocation={setLocation} />
             <ShiftTabs />
         </div>
