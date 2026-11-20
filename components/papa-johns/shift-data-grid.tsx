@@ -1,6 +1,6 @@
 "use client";
 
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridEditInputCell, type GridColDef } from "@mui/x-data-grid";
 import Paper from "@mui/material/Paper";
 import type { Shift } from "@/db/schema";
 import { updateShiftAction } from "@/lib/actions/papa-johns/shift-actions";
@@ -49,7 +49,18 @@ const columns: GridColDef[] = [
         field: "start",
         headerName: "Date",
         headerAlign: "center",
-        valueFormatter: (value) => (value == null ? "" : dateFormatter.format(value)),
+        editable: true,
+        valueFormatter: (value) => (value ? dateFormatter.format(value) : ""),
+        renderEditCell: (params) => (
+            <GridEditInputCell
+                {...params}
+                inputProps={{
+                    type: "datetime-local",
+                    value: params.value ? toLocalDateTimeString(new Date(params.value)) : "",
+                }}
+            />
+        ),
+        valueParser: (value) => (value ? new Date(value) : null),
     },
     {
         field: "storeHrs",
@@ -147,6 +158,13 @@ const columns: GridColDef[] = [
         align: "right",
     },
 ];
+
+/** Converts a Date object to a local date-time string. */
+function toLocalDateTimeString(date: Date) {
+    const pad = (value: number) => String(value).padStart(2, "0");
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
 
 /** Returns the half-open date interval represented by the selected history filter. */
 function getDateRange(filter: DateFilter) {
