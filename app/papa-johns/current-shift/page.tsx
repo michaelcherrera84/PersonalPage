@@ -81,7 +81,7 @@ async function CurrentShiftContent() {
             </TableContainer>
             <div className="mt-4 flex justify-between">
                 <EndShiftButton activeShift={activeShift} />
-                <Button variant="outlined" href="/papa-johns/shift-data/edit-deliveries">Edit Deliveries</Button>
+                <Button variant="outlined" href="/papa-johns/current-shift/edit-deliveries">Edit Deliveries</Button>
             </div>
         </div>
     );

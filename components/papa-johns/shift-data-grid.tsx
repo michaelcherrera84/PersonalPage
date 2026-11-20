@@ -30,7 +30,7 @@ type EditableShift = Omit<
     mileageCost: number | string | null;
 };
 
-type DateFilter = "today" | "week" | "payPeriod" | "month";
+type DateFilter = "today" | "week" | "payPeriod" | "lastPayPeriod" | "month";
 
 const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -194,6 +194,16 @@ function getDateRange(filter: DateFilter) {
     const end = new Date(start);
     end.setDate(end.getDate() + 14);
 
+    if (filter === "lastPayPeriod") {
+        const lastStart = new Date(start);
+        lastStart.setDate(lastStart.getDate() - 14);
+
+        return {
+            start: lastStart,
+            end: start,
+        };
+    }
+
     return { start, end };
 }
 
@@ -307,6 +317,13 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     </Button>
 
                     <Button
+                        variant={activeFilter === "lastPayPeriod" ? "contained" : "outlined"}
+                        onClick={() => setActiveFilter("lastPayPeriod")}
+                    >
+                        Last Pay Period
+                    </Button>
+
+                    <Button
                         variant={activeFilter === "month" ? "contained" : "outlined"}
                         onClick={() => setActiveFilter("month")}
                     >
@@ -314,7 +331,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     </Button>
                 </ButtonGroup>
             </div>
-            <div className="sm:hidden m-4 flex justify-between gap-2 flex-wrap">
+            <div className="sm:hidden m-4 flex justify-around gap-2 flex-wrap">
                 <Typography
                     onClick={() => setActiveFilter("today")}
                     className="cursor-pointer hover:underline text-nowrap"
@@ -335,6 +352,13 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
                     sx={{ color: activeFilter == "payPeriod" ? "primary" : "primary.main" }}
                 >
                     This Pay Period
+                </Typography>
+                <Typography
+                    onClick={() => setActiveFilter("lastPayPeriod")}
+                    className="cursor-pointer hover:underline text-nowrap"
+                    sx={{ color: activeFilter == "lastPayPeriod" ? "primary" : "primary.main" }}
+                >
+                    Last Pay Period
                 </Typography>
                 <Typography
                     onClick={() => setActiveFilter("month")}
