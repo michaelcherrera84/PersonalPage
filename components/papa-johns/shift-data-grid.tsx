@@ -465,7 +465,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
 
                     <div>
                         <div className="text-sm text-gray-500">Average Rating</div>
-                        <div>{totals.averageRating}</div>
+                        <div>{totals.averageRating?.toFixed(2)}</div>
                     </div>
 
                     {activeFilter === "today" && (
