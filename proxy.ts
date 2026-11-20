@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
+/** Checks the session JWT signature and confirms it contains a user subject. */
 async function isAuthenticated(request: NextRequest) {
     const token = request.cookies.get("session")?.value;
     const secret = process.env.SESSION_SECRET;
@@ -20,6 +21,7 @@ async function isAuthenticated(request: NextRequest) {
     }
 }
 
+/** Redirects unauthenticated requests to login and authenticated users away from login. */
 export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const authenticated = await isAuthenticated(request);

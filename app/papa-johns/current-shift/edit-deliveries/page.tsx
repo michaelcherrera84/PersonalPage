@@ -4,6 +4,7 @@ import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
 import { Box, Typography } from "@mui/material";
 import { Suspense } from "react";
 
+/** Loads the active shift's deliveries for inline editing. */
 async function DeliveriesData() {
     const activeShift = await getActiveShiftService();
     const deliveries = await getDeliveriesByShiftId(activeShift.id);
@@ -11,6 +12,7 @@ async function DeliveriesData() {
     return <ShiftDeliveriesDataGrid rows={deliveries} />
 }
 
+/** Renders the delivery-editing page and its loading state. */
 export default function EditShiftDeliveriesPage() {
     return (
         <Box className="pb-8">

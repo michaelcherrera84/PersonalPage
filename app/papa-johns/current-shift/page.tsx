@@ -5,6 +5,7 @@ import { getActiveShiftService } from "@/lib/services/papa-johns/shift-service";
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { Suspense } from "react";
 
+/** Loads the active shift and deliveries, then summarizes current shift earnings. */
 async function CurrentShiftContent() {
     const activeShift = await getActiveShiftService();
 
@@ -87,6 +88,7 @@ async function CurrentShiftContent() {
     );
 }
 
+/** Renders the current-shift summary and delivery navigation. */
 export default function CurrentShiftPage() {
     return (
         <Box>

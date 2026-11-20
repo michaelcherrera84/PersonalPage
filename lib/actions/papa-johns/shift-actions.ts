@@ -7,6 +7,7 @@ import { ActionResponse } from "@/lib/types/Response";
 import { getDeliveriesByShiftId } from "@/lib/services/papa-johns/delivery-service";
 import { verifySession } from "@/lib/auth/session";
 
+/** Reads an optional numeric form field, treating blank or invalid values as null. */
 function getOptionalNumber(formData: FormData, key: string): number | null {
     const value = formData.get(key);
 
@@ -19,6 +20,7 @@ function getOptionalNumber(formData: FormData, key: string): number | null {
     return Number.isFinite(number) ? number : null;
 }
 
+/** Starts a shift if the user is authenticated and no shift is already active. */
 export async function startShiftAction(): Promise<ActionResponse<Shift>> {
     const user = await verifySession();
 
@@ -57,6 +59,7 @@ export async function startShiftAction(): Promise<ActionResponse<Shift>> {
     }
 }
 
+/** Persists editable shift data after confirming that the user is authenticated. */
 export async function updateShiftAction(data: Shift): Promise<ActionResponse<Shift>> {
     const user = await verifySession();
 
@@ -83,6 +86,10 @@ export async function updateShiftAction(data: Shift): Promise<ActionResponse<Shi
     }
 }
 
+/**
+ * Closes a shift, records its hours and mileage, and derives tips, rating, and pay totals.
+ * The hourly and mileage rates are the fixed values currently used by this app.
+ */
 export async function endShiftAction(
     data: Shift,
     formData: FormData
@@ -135,6 +142,7 @@ export async function endShiftAction(
             : null;
 
         // Calculations
+        // Todo: replace hardcoded values with a settings table.
         const driverInStorePay = storeHrs === null ? null : storeHrs * 8;
         const onRoadPay = roadHrs === null ? null : roadHrs * 5.50;
         const mileage = miles === null ? null : miles * 0.45;

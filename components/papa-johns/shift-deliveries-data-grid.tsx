@@ -83,9 +83,11 @@ const columns: GridColDef[] = [
     },
 ];
 
+/** Renders editable delivery records for the selected shift. */
 export default function ShiftDeliveriesDataGrid({ rows }: { rows: Delivery[] }) {
     const [allRows, setAllRows] = useState(rows);
 
+    /** Converts editable grid values to finite numbers, mapping blanks to null. */
     function toNumberOrNull(value: unknown): number | null {
         if (value === "" || value === null || value === undefined) {
             return null;
@@ -96,6 +98,7 @@ export default function ShiftDeliveriesDataGrid({ rows }: { rows: Delivery[] }) 
         return Number.isFinite(number) ? number : null;
     }
 
+    /** Normalizes and saves an edited delivery, then updates the local grid data. */
     async function processDeliveryUpdate(updatedRow: EditableDelivery) {
         const parsedRow: Delivery = {
             ...updatedRow,
@@ -117,6 +120,7 @@ export default function ShiftDeliveriesDataGrid({ rows }: { rows: Delivery[] }) 
         return parsedRow;
     }
 
+    /** Logs and displays errors raised while saving an edited delivery. */
     function handleProcessRowUpdateError(error: Error) {
         console.error("Failed to update delivery:", error);
         alert(error.message);

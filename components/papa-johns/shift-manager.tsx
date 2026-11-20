@@ -2,7 +2,7 @@
 
 import { shift } from "@/db/schema";
 import { Button } from "@mui/material";
-import { endShiftAction, startShiftAction } from "@/lib/actions/papa-johns/shift-actions";
+import { startShiftAction } from "@/lib/actions/papa-johns/shift-actions";
 import { useState } from "react";
 import AddDeliveryForm from "@/components/papa-johns/add-delivery-form";
 import ShiftTabs from "@/components/papa-johns/shift-tabs";
@@ -13,9 +13,11 @@ type Props = {
     activeShift: ActiveShift | null;
 };
 
+/** Shows the shift-start control or the delivery-entry form for the active shift. */
 export default function ShiftManager({ activeShift }: Props) {
     const [location, setLocation] = useState<string>("");
 
+    /** Starts a shift and alerts the user if the request fails. */
     const handleStartShift = async () => {
         const response = await startShiftAction();
 

@@ -4,6 +4,7 @@ import { getUserByIdService } from "@/lib/services/user-service";
 
 const secret = new TextEncoder().encode(process.env.SESSION_SECRET);
 
+/** Verifies the session cookie and returns its user without the stored password. */
 export async function verifySession() {
     const cookieStore = await cookies();
     const token = cookieStore.get("session")?.value;

@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     },
 };
 
+/** Wraps every route with the shared font, theme providers, and document shell. */
 export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html lang="en" className={`${roboto.className} h-full antialiased`} suppressHydrationWarning>

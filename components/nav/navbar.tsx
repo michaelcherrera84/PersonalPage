@@ -19,9 +19,11 @@ type Props = {
     title: string;
 };
 
+/** Renders responsive app navigation with links to the dashboard and shift tools. */
 export default function Navbar({ title }: Props) {
     const [open, setOpen] = useState(false);
 
+    /** Creates a drawer event handler that sets the drawer's open state. */
     const toggleDrawer = (newOpen: boolean) => () => {
         setOpen(newOpen);
     };

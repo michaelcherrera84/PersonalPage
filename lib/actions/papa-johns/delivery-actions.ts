@@ -79,6 +79,7 @@ const STREET_ABBREVIATIONS: Record<string, string> = {
     Way: "Way",
 };
 
+/** Formats reverse-geocoded address fields as a concise US mailing address. */
 function formatUSAddress(addr: Record<string, string> = {}): string {
     // 1. Abbreviate the street suffix (e.g., "Cantal Drive" -> "Cantal Dr")
     const road = (addr.road || "").replace(
@@ -103,6 +104,7 @@ function formatUSAddress(addr: Record<string, string> = {}): string {
     return [streetLine, city, stateZip].filter(Boolean).join(", ");
 }
 
+/** Looks up the address at the supplied coordinates using OpenStreetMap Nominatim. */
 export async function getAddress(lat: number, lon: number): Promise<ActionResponse<string>> {
     const user = await verifySession();
 
@@ -148,6 +150,7 @@ export async function getAddress(lat: number, lon: number): Promise<ActionRespon
     }
 }
 
+/** Creates a delivery for the current active shift from submitted form fields. */
 export async function addDeliveryAction(formData: FormData): Promise<ActionResponse<Delivery>> {
     const user = await verifySession();
 
@@ -182,6 +185,7 @@ export async function addDeliveryAction(formData: FormData): Promise<ActionRespo
     }
 }
 
+/** Updates a delivery after confirming that the request has an authenticated session. */
 export async function updateDeliveryAction(data: Delivery): Promise<ActionResponse<Delivery>> {
     const user = await verifySession();
 

@@ -8,6 +8,7 @@ import { createUserService, getUserByEmailService } from "@/lib/services/user-se
 import { ActionResponse } from "@/lib/types/Response";
 import { User } from "@/db/schema";
 
+/** Hashes the submitted password and creates an account. */
 export async function signup(formData: FormData): Promise<ActionResponse<User>> {
     const data = Object.fromEntries(formData.entries());
 
@@ -29,6 +30,7 @@ export async function signup(formData: FormData): Promise<ActionResponse<User>> 
     };
 }
 
+/** Verifies credentials and stores a signed, seven-day session cookie on success. */
 export async function login(formData: FormData): Promise<ActionResponse<undefined>> {
     const email = formData.get("email");
     const password = formData.get("password");
@@ -78,6 +80,7 @@ export async function login(formData: FormData): Promise<ActionResponse<undefine
     };
 }
 
+/** Deletes the session cookie and redirects the user to the login page. */
 export async function logout() {
     const cookieStore = await cookies();
 

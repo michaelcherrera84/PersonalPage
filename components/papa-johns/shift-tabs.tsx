@@ -8,6 +8,7 @@ const tabs = [
     { label: "Current Shift", href: "/papa-johns/current-shift" },
 ];
 
+/** Renders bottom navigation between delivery entry and the current-shift summary. */
 export default function ShiftTabs() {
     const pathname = usePathname();
     const router = useRouter();

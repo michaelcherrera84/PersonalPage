@@ -6,10 +6,12 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+/** Renders the shift-closing dialog for entering hours and miles. */
 export default function EndShiftButton({ activeShift }: { activeShift: Shift }) {
     const [openDialog, setOpenDialog] = useState(false);
     const router = useRouter();
 
+    /** Saves the shift's closing details and navigates to the shift history. */
     const handleEndShift = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+/** Supplies installable-app metadata and icon paths to supported browsers. */
 export default function manifest(): MetadataRoute.Manifest {
     return {
         name: "Personal Page",

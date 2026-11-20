@@ -10,6 +10,7 @@ type Props = {
     setLocation: Dispatch<SetStateAction<string>>;
 };
 
+/** Renders the form for recording delivery tips, rating, address, and cash payment. */
 export default function AddDeliveryForm({ location, setLocation }: Props) {
     const [rating, setRating] = useState<number | null>(null);
     const [cashTip, setCashTip] = useState("");
@@ -19,6 +20,7 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
 
     const isFormEmpty = !cashTip.trim() && !ccTip.trim() && rating === null && !location.trim() && !cashPayment.trim();
 
+    /** Submits non-empty delivery details and clears the form after a successful save. */
     const handleAddDelivery = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 

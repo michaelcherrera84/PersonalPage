@@ -8,9 +8,11 @@ type Props = {
     setLocation: Dispatch<SetStateAction<string>>;
 };
 
+/** Renders a button that fills the address field with the device's current location. */
 export default function AddAddressButton({ setLocation }: Props) {
     const [loading, setLoading] = useState(false);
 
+    /** Requests browser geolocation, reverse-geocodes it, and updates the address field. */
     const handleGetAddress = () => {
     if (!("geolocation" in navigator)) {
         alert("Geolocation is not supported by your browser.");

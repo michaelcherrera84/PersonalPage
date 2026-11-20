@@ -148,6 +148,7 @@ const columns: GridColDef[] = [
     },
 ];
 
+/** Returns the half-open date interval represented by the selected history filter. */
 function getDateRange(filter: DateFilter) {
     const now = new Date();
 
@@ -207,6 +208,7 @@ function getDateRange(filter: DateFilter) {
     return { start, end };
 }
 
+/** Totals the selected shifts and derives combined earnings and earnings per hour. */
 function calculateTotals(rows: Shift[]) {
     const ratings = rows
         .map((row) => row.averageRating)
@@ -240,6 +242,7 @@ function calculateTotals(rows: Shift[]) {
     };
 }
 
+/** Renders editable shift history, date filters, and totals for the filtered shifts. */
 export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
     const [activeFilter, setActiveFilter] = useState<DateFilter>("week");
 
@@ -251,6 +254,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
 
     const totals = calculateTotals(filteredRows);
 
+    /** Converts editable grid values to finite numbers, mapping blanks to null. */
     function toNumberOrNull(value: unknown): number | null {
         if (value === "" || value === null || value === undefined) {
             return null;
@@ -261,6 +265,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
         return Number.isFinite(number) ? number : null;
     }
 
+    /** Normalizes and saves an edited shift row, then updates the local grid data. */
     async function processShiftRowUpdate(updatedRow: EditableShift) {
         const parsedRow: Shift = {
             ...updatedRow,
@@ -286,6 +291,7 @@ export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
         return parsedRow;
     }
 
+    /** Logs and displays errors raised while saving an edited shift row. */
     function handleProcessRowUpdateError(error: Error) {
         console.error("Failed to update shift:", error);
         alert(error.message);

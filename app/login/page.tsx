@@ -4,9 +4,11 @@ import { login } from "@/lib/actions/auth-actions";
 import { Button, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+/** Renders the sign-in form and routes the user home after successful login. */
 export default function LoginPage() {
     const router = useRouter();
 
+    /** Submits the form to the login action and reports authentication errors. */
     const handleLogin = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
 
