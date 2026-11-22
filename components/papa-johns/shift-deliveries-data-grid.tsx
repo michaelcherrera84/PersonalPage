@@ -2,7 +2,7 @@
 
 import { Delivery } from "@/db/schema";
 import { updateDeliveryAction } from "@/lib/actions/papa-johns/delivery-actions";
-import { Paper } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useState } from "react";
 
@@ -128,6 +128,7 @@ export default function ShiftDeliveriesDataGrid({ rows }: { rows: Delivery[] }) 
 
     return (
         <div className="mt-8">
+            <Button variant="contained" href="/papa-johns/current-shift" className="ml-2 md:md-8">Back</Button>
             <Paper className="m-2 md:m-8">
                 <DataGrid
                     rows={allRows}
