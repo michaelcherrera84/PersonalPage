@@ -168,6 +168,7 @@ export async function addDeliveryAction(formData: FormData): Promise<ActionRespo
             ...data,
             shiftId: (await getActiveShiftService()).id,
             dateTime: new Date(),
+            address: data.address === "" ? null : data.address
         };
 
         const newDelivery = await createDeliveryService(delivery);

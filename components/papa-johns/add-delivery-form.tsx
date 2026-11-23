@@ -2,23 +2,19 @@
 
 import { Button, Rating, TextField, Typography } from "@mui/material";
 import AddAddressButton from "@/components/papa-johns/add-address-button";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { addDeliveryAction } from "@/lib/actions/papa-johns/delivery-actions";
 
-type Props = {
-    location: string;
-    setLocation: Dispatch<SetStateAction<string>>;
-};
-
 /** Renders the form for recording delivery tips, rating, address, and cash payment. */
-export default function AddDeliveryForm({ location, setLocation }: Props) {
+export default function AddDeliveryForm() {
     const [rating, setRating] = useState<number | null>(null);
     const [cashTip, setCashTip] = useState("");
     const [ccTip, setCcTip] = useState("");
+    const [location, setLocation] = useState<string | null>(null);
     const [cashPayment, setCashPayment] = useState("");
     const formRef = useRef<HTMLFormElement>(null);
 
-    const isFormEmpty = !cashTip.trim() && !ccTip.trim() && rating === null && !location.trim() && !cashPayment.trim();
+    const isFormEmpty = !cashTip.trim() && !ccTip.trim() && rating === null && !location?.trim() && !cashPayment.trim();
 
     /** Submits non-empty delivery details and clears the form after a successful save. */
     const handleAddDelivery = async (event: React.SubmitEvent<HTMLFormElement>) => {
@@ -41,6 +37,7 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
             setLocation("");
         } else {
             alert(response.message);
+
         }
     };
 
@@ -75,10 +72,11 @@ export default function AddDeliveryForm({ location, setLocation }: Props) {
                     <Typography>Rate this delivery</Typography>
                     <Rating precision={0.5} value={rating} size="large" onChange={(_, value) => setRating(value)} />
                 </div>
-                {location ? (
+                {location !== null ? (
                     <TextField
                         id="address"
                         name="address"
+                        label="Address"
                         value={location ?? ""}
                         onChange={(e) => setLocation(e.target.value)}
                     />

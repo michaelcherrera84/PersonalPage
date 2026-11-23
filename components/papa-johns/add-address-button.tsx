@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { getAddress } from "@/lib/actions/papa-johns/delivery-actions";
 
 type Props = {
-    setLocation: Dispatch<SetStateAction<string>>;
+    setLocation: Dispatch<SetStateAction<string | null>>;
 };
 
 /** Renders a button that fills the address field with the device's current location. */
