@@ -40,15 +40,36 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "2-digit",
     day: "2-digit",
-    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
     timeZone: "America/Chicago",
 });
 
 const columns: GridColDef[] = [
     {
         field: "start",
-        headerName: "Date",
+        headerName: "Start",
         headerAlign: "center",
+        width: 130,
+        editable: true,
+        valueFormatter: (value) => (value ? dateFormatter.format(value) : ""),
+        renderEditCell: (params) => (
+            <GridEditInputCell
+                {...params}
+                inputProps={{
+                    type: "datetime-local",
+                    value: params.value ? toLocalDateTimeString(new Date(params.value)) : "",
+                }}
+            />
+        ),
+        valueParser: (value) => (value ? new Date(value) : null),
+    },
+    {
+        field: "end",
+        headerName: "End",
+        headerAlign: "center",
+        width: 130,
         editable: true,
         valueFormatter: (value) => (value ? dateFormatter.format(value) : ""),
         renderEditCell: (params) => (
