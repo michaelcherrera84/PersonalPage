@@ -21,6 +21,22 @@ export const metadata: Metadata = {
             { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
         ],
     },
+    openGraph: {
+        title: "Personal Page",
+        description: "Personal job companion.",
+        url: "https://personal-page.michaelcherrera.com",
+        siteName: "Personal Page",
+        images: [
+            {
+                url: "https://personal-page.michaelcherrera.com/android-chrome-512x512.png",
+                width: 1200,
+                height: 630,
+                alt: "michaelcherrera",
+            },
+        ],
+        locale: "en_US",
+        type: "website",
+    },
 };
 
 /** Wraps every route with the shared font, theme providers, and document shell. */
