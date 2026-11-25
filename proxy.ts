@@ -40,11 +40,6 @@ export async function proxy(request: NextRequest) {
         return response;
     }
 
-    // Go directly to papa johns delivery entry if on a shift.
-    if (activePapaJohnsShift && pathname === "/") {
-        return NextResponse.redirect(new URL("/papa-johns", request.url));
-    }
-
     return NextResponse.next();
 }
 

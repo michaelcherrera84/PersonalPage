@@ -6,6 +6,8 @@ import type { Shift } from "@/db/schema";
 import { updateShiftAction } from "@/lib/actions/papa-johns/shift-actions";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
+import { DateFilter, getDateRange, toLocalDateTimeString } from "@/lib/utils/date-utils";
+import { currencyFormatter } from "@/lib/utils/currency-utils";
 
 type EditableShift = Omit<
     Shift,
@@ -29,13 +31,6 @@ type EditableShift = Omit<
     ccTips: number | string | null;
     mileageCost: number | string | null;
 };
-
-type DateFilter = "today" | "week" | "payPeriod" | "lastPayPeriod" | "month";
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-});
 
 const dateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "2-digit",
@@ -180,73 +175,6 @@ const columns: GridColDef[] = [
     },
 ];
 
-/** Converts a Date object to a local date-time string. */
-function toLocalDateTimeString(date: Date) {
-    const pad = (value: number) => String(value).padStart(2, "0");
-
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-}
-
-/** Returns the half-open date interval represented by the selected history filter. */
-function getDateRange(filter: DateFilter) {
-    const now = new Date();
-
-    if (filter === "today") {
-        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const end = new Date(start);
-        end.setDate(end.getDate() + 1);
-
-        return { start, end };
-    }
-
-    if (filter === "month") {
-        return {
-            start: new Date(now.getFullYear(), now.getMonth(), 1),
-            end: new Date(now.getFullYear(), now.getMonth() + 1, 1),
-        };
-    }
-
-    if (filter === "week") {
-        const today = new Date();
-        const start = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-
-        // Move back to Thursday
-        start.setDate(start.getDate() - ((start.getDay() - 4 + 7) % 7));
-
-        const end = new Date(start);
-        end.setDate(end.getDate() + 7);
-
-        return { start, end };
-    }
-
-    // Pay periods are 14 days, beginning October 1, 2026.
-    const anchor = new Date(2026, 9, 1);
-
-    // Compare calendar days rather than milliseconds to avoid DST issues.
-    const calendarDay = (date: Date) => Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86_400_000;
-
-    const daysSinceAnchor = calendarDay(now) - calendarDay(anchor);
-    const periodOffset = Math.floor(daysSinceAnchor / 14) * 14;
-
-    const start = new Date(anchor);
-    start.setDate(start.getDate() + periodOffset);
-
-    const end = new Date(start);
-    end.setDate(end.getDate() + 14);
-
-    if (filter === "lastPayPeriod") {
-        const lastStart = new Date(start);
-        lastStart.setDate(lastStart.getDate() - 14);
-
-        return {
-            start: lastStart,
-            end: start,
-        };
-    }
-
-    return { start, end };
-}
-
 /** Totals the selected shifts and derives combined earnings and earnings per hour. */
 function calculateTotals(rows: Shift[]) {
     const ratings = rows
@@ -284,10 +212,10 @@ function calculateTotals(rows: Shift[]) {
 /** Renders editable shift history, date filters, and totals for the filtered shifts. */
 export default function ShiftDataGrid({ rows }: { rows: Shift[] }) {
     const [activeFilter, setActiveFilter] = useState<DateFilter>("week");
-
     const [allRows, setAllRows] = useState(rows);
+    const [now] = useState(() => new Date());
 
-    const { start, end } = getDateRange(activeFilter);
+    const { start, end } = getDateRange(activeFilter, now);
 
     const filteredRows = allRows.filter((row) => row.start >= start && row.start < end);
 
