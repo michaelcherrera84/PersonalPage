@@ -22,7 +22,8 @@ function summarizeShifts(shifts: Shift[], start: Date, end: Date): ShiftSummary 
                 (shift.driverInStorePay ?? 0) +
                 (shift.onRoadPay ?? 0) +
                 (shift.cashTips ?? 0) +
-                (shift.ccTips ?? 0) -
+                (shift.ccTips ?? 0) +
+                (shift.mileage ?? 0) -
                 (shift.mileageCost ?? 0),
             0,
         ),
