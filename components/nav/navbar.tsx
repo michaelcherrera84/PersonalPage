@@ -5,6 +5,7 @@ import {
     AccordionDetails,
     AccordionSummary,
     Box,
+    Button,
     Drawer,
     IconButton,
     Link,
@@ -15,12 +16,18 @@ import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { logout } from "@/lib/actions/auth-actions";
 
+interface NavLink {
+    label: string;
+    href: string;
+}
+
 type Props = {
     title: string;
+    links: NavLink[];
 };
 
 /** Renders responsive app navigation with links to the dashboard and shift tools. */
-export default function Navbar({ title }: Props) {
+export default function Navbar({ title, links }: Props) {
     const [open, setOpen] = useState(false);
 
     /** Creates a drawer event handler that sets the drawer's open state. */
@@ -71,7 +78,9 @@ export default function Navbar({ title }: Props) {
                 <IconButton onClick={toggleDrawer(true)}>
                     <MenuIcon />
                 </IconButton>
-                <Typography variant="h1" className="text-4xl font-medium">{title}</Typography>
+                <Typography variant="h1" className="text-4xl font-medium">
+                    {title}
+                </Typography>
                 <IconButton className="opacity-0">
                     <MenuIcon />
                 </IconButton>
@@ -79,12 +88,21 @@ export default function Navbar({ title }: Props) {
             <Drawer open={open} onClose={toggleDrawer(false)}>
                 {DrawerList}
             </Drawer>
-           
+
             <Paper className="hidden sm:flex justify-between items-center py-4 px-8 mb-8">
-                <Typography variant="h1" className="text-3xl font-medium">{title}</Typography>
-                <div className="flex gap-8">
-                    <Link href="/papa-johns">Delivery Entry</Link>
-                    <Link href="/papa-johns/shift-data">Shift Data</Link>
+                <Typography variant="h1" className="text-3xl font-medium">
+                    {title}
+                </Typography>
+                <div className="flex gap-8 items-center">
+                    {links.map((link) => (
+                        <Link key={link.label} href={link.href}>
+                            {link.label}
+                        </Link>
+                    ))}
+                    
+                    <Button variant="outlined" onClick={logout}>
+                        Sign Out
+                    </Button>
                 </div>
             </Paper>
         </nav>
