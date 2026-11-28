@@ -8,6 +8,7 @@ import { Button, ButtonGroup, Typography } from "@mui/material";
 import { useState } from "react";
 import { DateFilter, getDateRange, toLocalDateTimeString } from "@/lib/utils/date-utils";
 import { currencyFormatter } from "@/lib/utils/currency-utils";
+import { DateTimeEditCell } from "@/components/date-time-edit-cell"
 
 type EditableShift = Omit<
     Shift,
@@ -49,34 +50,16 @@ const columns: GridColDef[] = [
         width: 130,
         editable: true,
         valueFormatter: (value) => (value ? dateFormatter.format(value) : ""),
-        renderEditCell: (params) => (
-            <GridEditInputCell
-                {...params}
-                inputProps={{
-                    type: "datetime-local",
-                    value: params.value ? toLocalDateTimeString(new Date(params.value)) : "",
-                }}
-            />
-        ),
-        valueParser: (value) => (value ? new Date(value) : null),
+        renderEditCell: (params) => <DateTimeEditCell {...params} />,
     },
     {
         field: "end",
         headerName: "End",
         headerAlign: "center",
-        width: 130,
+        width: 180,
         editable: true,
         valueFormatter: (value) => (value ? dateFormatter.format(value) : ""),
-        renderEditCell: (params) => (
-            <GridEditInputCell
-                {...params}
-                inputProps={{
-                    type: "datetime-local",
-                    value: params.value ? toLocalDateTimeString(new Date(params.value)) : "",
-                }}
-            />
-        ),
-        valueParser: (value) => (value ? new Date(value) : null),
+        renderEditCell: (params) => <DateTimeEditCell {...params} />,
     },
     {
         field: "storeHrs",
